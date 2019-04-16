@@ -8,11 +8,11 @@ namespace zatbAPI.Models.Forms
 {
     public class SigninForm
     {
-        /// <summary>
-        /// 用户类型(1管理员；2学生)
-        /// </summary>
-        [Required]
-        public int category { get; set; }
+        ///// <summary>
+        ///// 用户类型(1管理员；2学生)
+        ///// </summary>
+        //[Required]
+        //public int category { get; set; }
         /// <summary>
         /// 用户名
         /// </summary>

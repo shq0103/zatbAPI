@@ -4,6 +4,11 @@
         <name>zatbAPI</name>
     </assembly>
     <members>
+        <member name="M:zatbAPI.Controllers.AuthController.Sigin(zatbAPI.Models.Forms.SigninForm)">
+            <summary>
+            登陆获取token
+            </summary> 
+        </member>
         <member name="M:zatbAPI.DbHelper.IDaoBase`2.Get(`1)">
             <summary>
             通过主键获取实体对象
@@ -207,11 +212,6 @@
             <param name="conditions"></param>
             <param name="parameters"></param>
             <returns></returns>
-        </member>
-        <member name="P:zatbAPI.Models.Forms.SigninForm.category">
-            <summary>
-            用户类型(1管理员；2学生)
-            </summary>
         </member>
         <member name="P:zatbAPI.Models.Forms.SigninForm.username">
             <summary>

@@ -1,8 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Annotations;
+using zatbAPI.DbHelper.IRepository;
+using zatbAPI.Models;
+using zatbAPI.Models.Forms;
+using zatbAPI.Models.RestfulData;
+using zatbAPI.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,36 +22,49 @@ namespace zatbAPI.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
+        /// <summary>
+        /// 登陆获取token
+        /// </summary> 
+        [EnableCors("MPolicy")]
         [HttpPost]
-        public void Post([FromBody]string value)
+        [SwaggerResponse(200, "登陆成功", typeof(RestfulData<TokenObj>))]
+        [SwaggerResponse(400, null, typeof(RestfulData))]
+        public async Task<ActionResult> Sigin([FromBody, BindRequired] SigninForm signinForm)
         {
-        }
+            var result = new RestfulData<TokenObj>();
+            //验证用户名和密码
+            var userInfo = await new AdminDao().GetAdmin(signinForm.username, signinForm.password);
+            if (userInfo != null)
+            {
+                var claims = new Claim[]
+                {
+                   new Claim(ClaimTypes.Name,userInfo.username),
+                   new Claim(ClaimTypes.Role,userInfo.role),
+                   new Claim(ClaimTypes.Sid,userInfo.id.ToString()),
+                };
+                var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(ConfigHelper.GetValueByKey("SecurityKey")));
+                var expires = DateTime.Now.AddDays(30);//
+                var token = new JwtSecurityToken(
+                            issuer: ConfigHelper.GetValueByKey("issuer"),
+                            audience: ConfigHelper.GetValueByKey("audience"),
+                            claims: claims,
+                            notBefore: DateTime.Now,
+                            expires: expires,
+                            signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
+                //生成Token
+                string jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+                result.code = 200;
+                result.data = new TokenObj() { token = jwtToken, expires = expires.ToFileTimeUtc() };
+                result.message = "授权成功！";
+                return Ok(result);
+            }
+            else
+            {
+                result.message = "账号或密码错误";
+                result.code = 400;
+                return BadRequest(result);
+            }
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
