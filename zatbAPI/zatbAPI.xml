@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>zatbAPI</name>
+    </assembly>
+    <members>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.Get(`1)">
+            <summary>
+            通过主键获取实体对象
+            </summary>
+            <param name="id">主键ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.Get(System.String,System.Object)">
+            <summary>
+            条件获取第一个数据
+            </summary>
+            <param name="conditions"></param>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.GetList">
+            <summary>
+            获取所有的数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.GetList(System.Object)">
+            <summary>
+            执行具有条件的查询，并将结果映射到强类型列表
+            </summary>
+            <param name="whereConditions">条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.GetList(System.String,System.Object)">
+            <summary>
+            带参数的查询满足条件的数据
+            </summary>
+            <param name="conditions">条件</param>
+            <param name="parameters">参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.GetListPaged(System.Int32,System.Int32,System.String,System.String,System.Object)">
+            <summary>
+            使用where子句执行查询，并将结果映射到具有Paging的强类型List
+            </summary>
+            <param name="pageNumber">页码</param>
+            <param name="rowsPerPage">每页显示数据</param>
+            <param name="conditions">查询条件</param>
+            <param name="orderby">排序</param>
+            <param name="parameters">参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.Insert(`0)">
+            <summary>
+            插入一条记录并返回主键值(自增类型返回主键值，否则返回null)
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.Update(`0)">
+            <summary>
+            更新一条数据并返回影响的行数
+            </summary>
+            <param name="entity"></param>
+            <returns>影响的行数</returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.Delete(`1)">
+            <summary>
+            根据实体主键删除一条数据
+            </summary>
+            <param name="id">主键</param>
+            <returns>影响的行数</returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.Delete(`0)">
+            <summary>
+            根据实体删除一条数据
+            </summary>
+            <param name="entity">实体</param>
+            <returns>返回影响的行数</returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.DeleteList(System.Object,System.Data.IDbTransaction,System.Nullable{System.Int32})">
+            <summary>
+            条件删除多条记录
+            </summary>
+            <param name="whereConditions">条件</param>
+            <param name="transaction">事务</param>
+            <param name="commandTimeout">超时时间</param>
+            <returns>影响的行数</returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.DeleteList(System.String,System.Object,System.Data.IDbTransaction,System.Nullable{System.Int32})">
+            <summary>
+            使用where子句删除多个记录
+            </summary>
+            <param name="conditions">wher子句</param>
+            <param name="parameters">参数</param>
+            <param name="transaction">事务</param>
+            <param name="commandTimeout">超时时间</param>
+            <returns>影响的行数</returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.RecordCount(System.String,System.Object)">
+            <summary>
+            满足条件的记录数量
+            </summary>
+            <param name="conditions"></param>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.GetAsync(`1)">
+            <summary>
+            通过主键获取实体对象
+            </summary>
+            <param name="id">主键ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.GetAsync(System.String,System.Object)">
+            <summary>
+            条件获取第一个
+            </summary>
+            <param name="conditions"></param>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.GetListAsync">
+            <summary>
+            获取所有的数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.GetListAsync(System.Object)">
+            <summary>
+            执行具有条件的查询，并将结果映射到强类型列表
+            </summary>
+            <param name="whereConditions">条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.GetListAsync(System.String,System.Object)">
+            <summary>
+            带参数的查询满足条件的数据
+            </summary>
+            <param name="conditions">条件</param>
+            <param name="parameters">参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.GetListPagedAsync(System.Int32,System.Int32,System.String,System.String,System.Object)">
+            <summary>
+            使用where子句执行查询，并将结果映射到具有Paging的强类型List
+            </summary>
+            <param name="pageNumber">页码</param>
+            <param name="rowsPerPage">每页显示数据</param>
+            <param name="conditions">查询条件</param>
+            <param name="orderby">排序</param>
+            <param name="parameters">参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.InsertAsync(`0)">
+            <summary>
+            插入一条记录并返回主键值
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.UpdateAsync(`0)">
+            <summary>
+            更新一条数据并返回影响的行数
+            </summary>
+            <param name="entity"></param>
+            <returns>影响的行数</returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.DeleteAsync(`1)">
+            <summary>
+            根据实体主键删除一条数据
+            </summary>
+            <param name="id">主键</param>
+            <returns>影响的行数</returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.DeleteAsync(`0)">
+            <summary>
+            根据实体删除一条数据
+            </summary>
+            <param name="entity">实体</param>
+            <returns>返回影响的行数</returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.DeleteListAsync(System.Object,System.Data.IDbTransaction,System.Nullable{System.Int32})">
+            <summary>
+            条件删除多条记录
+            </summary>
+            <param name="whereConditions">条件</param>
+            <param name="transaction">事务</param>
+            <param name="commandTimeout">超时时间</param>
+            <returns>影响的行数</returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.DeleteListAsync(System.String,System.Object,System.Data.IDbTransaction,System.Nullable{System.Int32})">
+            <summary>
+            使用where子句删除多个记录
+            </summary>
+            <param name="conditions">wher子句</param>
+            <param name="parameters">参数</param>
+            <param name="transaction">事务</param>
+            <param name="commandTimeout">超时时间</param>
+            <returns>影响的行数</returns>
+        </member>
+        <member name="M:zatbAPI.DbHelper.IDaoBase`2.RecordCountAsync(System.String,System.Object)">
+            <summary>
+            满足条件的记录数量
+            </summary>
+            <param name="conditions"></param>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="P:zatbAPI.Models.Forms.SigninForm.category">
+            <summary>
+            用户类型(1管理员；2学生)
+            </summary>
+        </member>
+        <member name="P:zatbAPI.Models.Forms.SigninForm.username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:zatbAPI.Models.Forms.SigninForm.password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:zatbAPI.Models.RestfulData.RestfulData.code">
+            <summary>
+            <![CDATA[错误码]]>
+            </summary>
+        </member>
+        <member name="P:zatbAPI.Models.RestfulData.RestfulData.message">
+             <summary>
+            <![CDATA[消息]]>
+             </summary>
+        </member>
+        <member name="T:zatbAPI.Models.RestfulData.RestfulData`1">
+             <summary>
+            
+             </summary>
+             <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:zatbAPI.Models.RestfulData.RestfulData`1.data">
+            <summary>
+            <![CDATA[数据]]>
+            </summary>
+        </member>
+        <member name="T:zatbAPI.Models.RestfulData.RestfulArray`1">
+            <summary>
+            <![CDATA[返回数组]]>
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:zatbAPI.Models.TokenObj.expires">
+            <summary>
+            token过期时间
+            </summary>
+        </member>
+    </members>
+</doc>
