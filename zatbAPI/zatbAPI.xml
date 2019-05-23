@@ -9,6 +9,18 @@
             登陆获取token
             </summary> 
         </member>
+        <member name="M:zatbAPI.Controllers.AuthController.Post(GenModel.Models.User)">
+            <summary>
+            用户注册
+            </summary>
+            <param name="user"></param>
+        </member>
+        <member name="M:zatbAPI.Controllers.PostController.Post(GenModel.Models.Post)">
+            <summary>
+            用户发帖
+            </summary>
+            <param name="post"></param>
+        </member>
         <member name="M:zatbAPI.DbHelper.IDaoBase`2.Get(`1)">
             <summary>
             通过主键获取实体对象

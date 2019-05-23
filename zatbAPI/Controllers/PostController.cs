@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GenModel.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using zatbAPI.DbHelper;
-using zatbAPI.Models.Post;
+using zatbAPI.Models.RestfulData;
+using zatbAPI.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace zatbAPI.Controllers
 {
     [Route("api/[controller]")]
+    
     public class PostController : Controller
     {
 
@@ -21,11 +22,22 @@ namespace zatbAPI.Controllers
             return new PostDao().Get(id);
         }
 
-        // POST api/<controller>
+
+        /// <summary>
+        /// 用户发帖
+        /// </summary>
+        /// <param name="post"></param>
+        [Authorize]
         [HttpPost]
-        public void Post([FromBody]Post post)
+        public RestfulData Post([FromBody]Post post)
         {
-            new PostDao().Insert(post);
+            var cUser = Helper.GetCurrentUser(HttpContext);
+            post.Author = cUser.Id;
+            post.Date = DateTime.Now.ToFileTimeUtc();
+            int i= new PostDao().Insert(post)??0;
+            var res = new RestfulData();
+            res.message = "新增成功！";
+            return res;
         }
 
         // PUT api/<controller>/5

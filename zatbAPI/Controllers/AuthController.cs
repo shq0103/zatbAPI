@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using GenModel.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -25,7 +26,6 @@ namespace zatbAPI.Controllers
         /// <summary>
         /// 登陆获取token
         /// </summary> 
-        [EnableCors("MPolicy")]
         [HttpPost]
         [SwaggerResponse(200, "登陆成功", typeof(RestfulData<TokenObj>))]
         [SwaggerResponse(400, null, typeof(RestfulData))]
@@ -33,14 +33,15 @@ namespace zatbAPI.Controllers
         {
             var result = new RestfulData<TokenObj>();
             //验证用户名和密码
-            var userInfo = await new AdminDao().GetAdmin(signinForm.username, signinForm.password);
+            var userInfo = await new UserDao().GetUser(signinForm.username, signinForm.password);
             if (userInfo != null)
             {
                 var claims = new Claim[]
                 {
-                   new Claim(ClaimTypes.Name,userInfo.username),
-                   new Claim(ClaimTypes.Role,userInfo.role),
-                   new Claim(ClaimTypes.Sid,userInfo.id.ToString()),
+                   new Claim(ClaimTypes.NameIdentifier,userInfo.Username),
+                   new Claim(ClaimTypes.Role,userInfo.Role),
+                   new Claim(ClaimTypes.Sid,userInfo.Id.ToString()),
+                   new Claim(ClaimTypes.Name,userInfo.Nickname),
                 };
                 var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(ConfigHelper.GetValueByKey("SecurityKey")));
                 var expires = DateTime.Now.AddDays(30);//
@@ -53,7 +54,6 @@ namespace zatbAPI.Controllers
                             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
                 //生成Token
                 string jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
-                result.code = 200;
                 result.data = new TokenObj() { token = jwtToken, expires = expires.ToFileTimeUtc() };
                 result.message = "授权成功！";
                 return Ok(result);
@@ -66,5 +66,28 @@ namespace zatbAPI.Controllers
             }
 
         }
+
+        /// <summary>
+        /// 用户注册
+        /// </summary>
+        /// <param name="user"></param>
+        [HttpPost("signin")]
+        public RestfulData Post([FromBody]User user)
+        {
+            
+            var result = new RestfulData();
+            int i = 0;
+            user.Role = "user";
+                 i= new UserDao().Insert(user) ?? 0;
+
+            if (i >0)
+            {
+                result.message = "注册成功！";
+            }
+            return result;
+        }
+
+
+
     }
 }
