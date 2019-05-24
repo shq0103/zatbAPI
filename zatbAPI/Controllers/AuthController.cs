@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using GenModel.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -27,7 +27,7 @@ namespace zatbAPI.Controllers
         /// 登陆获取token
         /// </summary> 
         [HttpPost]
-        [SwaggerResponse(200, "登陆成功", typeof(RestfulData<TokenObj>))]
+        [SwaggerResponse(200, "登陆成功", typeof(TokenObj))]
         [SwaggerResponse(400, null, typeof(RestfulData))]
         public async Task<ActionResult> Sigin([FromBody, BindRequired] SigninForm signinForm)
         {
@@ -38,10 +38,10 @@ namespace zatbAPI.Controllers
             {
                 var claims = new Claim[]
                 {
-                   new Claim(ClaimTypes.NameIdentifier,userInfo.Username),
-                   new Claim(ClaimTypes.Role,userInfo.Role),
                    new Claim(ClaimTypes.Sid,userInfo.Id.ToString()),
-                   new Claim(ClaimTypes.Name,userInfo.Nickname),
+                   new Claim(ClaimTypes.Name,userInfo.Nickname??""),
+                   new Claim(ClaimTypes.Role,userInfo.Role),
+                   new Claim(ClaimTypes.NameIdentifier,userInfo.Username),
                 };
                 var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(ConfigHelper.GetValueByKey("SecurityKey")));
                 var expires = DateTime.Now.AddDays(30);//
@@ -66,6 +66,49 @@ namespace zatbAPI.Controllers
             }
 
         }
+
+        /// <summary>
+        /// 退出登录
+        /// </summary> 
+        [HttpPost("logout")]
+        [SwaggerResponse(200, "登陆成功", typeof(RestfulData))]
+        public RestfulData Logout()
+        {
+            var claims = new Claim[] { };
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(ConfigHelper.GetValueByKey("SecurityKey")));
+            var expires = DateTime.Now.AddSeconds(2);//
+            var token = new JwtSecurityToken(
+                        issuer: ConfigHelper.GetValueByKey("issuer"),
+                        audience: ConfigHelper.GetValueByKey("audience"),
+                        claims: claims,
+                        notBefore: DateTime.Now,
+                        expires: expires,
+                        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
+            return new RestfulData() { message = "退出登录成功" };
+        }
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        [Authorize]
+        [HttpGet("user")]
+        [SwaggerResponse(200, "退出登录", typeof(UserInfo))]
+        public RestfulData<UserInfo> GetUserInfo()
+
+        {
+            var res = new RestfulData<UserInfo>();
+            var info = new UserInfo();
+            var cUser = Helper.GetCurrentUser(HttpContext);
+            string[] Roles = new string[] { cUser.Role };
+            //Roles[1] = cUser.Role;
+            res.data = new UserInfo()
+            {
+                Name = cUser.Nickname,
+                Roles = Roles,
+            };
+            return res;
+        }
+
+
 
         /// <summary>
         /// 用户注册

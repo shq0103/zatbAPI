@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GenModel.Models
+namespace zatbAPI.Models
 {
     public partial class TravelPlace
     {

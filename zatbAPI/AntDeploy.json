@@ -1,0 +1,37 @@
+﻿{
+  "Env": [
+    {
+      "Name": "my",
+      "ServerList": [
+        {
+          "Token": "test",
+          "Host": "203.195.140.254:9768",
+          "NickName": "test",
+          "IIsFireUrl": "",
+          "DockerFireUrl": null,
+          "WindowsServiceFireUrl": null
+        }
+      ],
+      "LinuxServerList": [],
+      "IgnoreList": [],
+      "WindowsBackUpIgnoreList": []
+    }
+  ],
+  "IIsConfig": {
+    "SdkType": "netcore",
+    "WebSiteName": "zatbAPI",
+    "LastEnvName": "my"
+  },
+  "WindowsServiveConfig": {
+    "ServiceName": "",
+    "SdkType": null,
+    "LastEnvName": null
+  },
+  "DockerConfig": {
+    "Prot": "",
+    "AspNetCoreEnv": "",
+    "LastEnvName": null,
+    "RemoveDaysFromPublished": "10",
+    "Volume": ""
+  }
+}

@@ -1,8 +1,8 @@
-﻿using GenModel.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using zatbAPI.DbHelper;
+using zatbAPI.Models;
 using zatbAPI.Models.RestfulData;
 using zatbAPI.Utils;
 
@@ -32,7 +32,7 @@ namespace zatbAPI.Controllers
         public RestfulData Post([FromBody]Post post)
         {
             var cUser = Helper.GetCurrentUser(HttpContext);
-            post.Author = cUser.Id;
+            post.UserId = cUser.Id;
             post.Date = DateTime.Now.ToFileTimeUtc();
             int i= new PostDao().Insert(post)??0;
             var res = new RestfulData();

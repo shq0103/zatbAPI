@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GenModel.Models
+namespace zatbAPI.Models
 {
     public partial class User
     {
@@ -19,5 +19,7 @@ namespace GenModel.Models
         public string Mail { get; set; }
         public string Intro { get; set; }
         public string Place { get; set; }
+        public long? LastTime { get; set; }
+        public int Status { get; set; }
     }
 }

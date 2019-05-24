@@ -1,15 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace GenModel.Models
+namespace zatbAPI.Models
 {
     public partial class Activity
     {
+        /// <summary>
+        /// 活动id
+        /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// 发布活动的用户id
+        /// </summary>
+        [Required]
+        public int UserId { get; set; }
         public string Name { get; set; }
         public long Date { get; set; }
         public long Deadline { get; set; }
-        public string Organiger { get; set; }
+        public int Status { get; set; }
         public string StartPlace { get; set; }
         public string Theme { get; set; }
         public int Quota { get; set; }
