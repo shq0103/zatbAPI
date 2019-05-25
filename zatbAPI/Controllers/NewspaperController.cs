@@ -58,7 +58,7 @@ namespace zatbAPI.Controllers
         }
 
         /// <summary>
-        /// 新增新闻
+        /// 发布新闻
         /// </summary>
         /// <param name="newspaper">新闻实体</param>
         [HttpPost]
