@@ -31,7 +31,7 @@ namespace zatbAPI.Models
         [Required]
         public string Contents { get; set; }
         /// <summary>
-        /// 类型
+        /// 类型(1.咨询，2.户外技巧，3.户外常识，4.户外装备)
         /// </summary>
         [Required]
         public int Type { get; set; }
@@ -44,5 +44,10 @@ namespace zatbAPI.Models
         /// 来源
         /// </summary>
         public string Source { get; set; }
+        /// <summary>
+        /// 图片url列表
+        /// </summary>
+        public IEnumerable<string> ImgList { get; set; }
+
     }
 }

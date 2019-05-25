@@ -37,6 +37,6 @@ namespace zatbAPI.Models.RestfulData
     /// <typeparam name="T"></typeparam>
     public class RestfulArray<T> : RestfulData<IEnumerable<T>>
     {
-
+        public int total;
     }
 }

@@ -15,19 +15,14 @@ namespace zatbAPI.Models
         /// </summary>
         public int? ToId { get; set; }
         /// <summary>
-        /// 图片名字
-        /// </summary>
-        [Required]
-        public string Name { get; set; }
-        /// <summary>
         /// 图片路径
         /// </summary>
         [Required]
         public string Url { get; set; }
         /// <summary>
-        /// 图片类型
+        /// 图片类型(1.新闻,2.活动，3.闲趣，4.打卡点)
         /// </summary>
 
-        public string Type { get; set; }
+        public int Type { get; set; }
     }
 }

@@ -96,7 +96,7 @@ namespace zatbAPI
             {
                 app.UseHsts();
             }
-
+            app.UseStaticFiles();
             app.UseCors(builder => builder
     .AllowAnyOrigin()
     .AllowAnyMethod()

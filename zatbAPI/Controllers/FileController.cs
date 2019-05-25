@@ -15,6 +15,7 @@ using zatbAPI.Models.RestfulData;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Authorization;
+using zatbAPI.DbHelper.IRepository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -39,9 +40,12 @@ namespace zatbAPI.Controllers
         /// <summary>
         /// 上传图片
         /// </summary>
+        /// <param name="file">图片</param>
+        /// <param name="type">类型（1.新闻,2.活动，3.闲趣，4.打卡点，5.头像）</param>
+        /// <returns></returns>
         [HttpPost("UploadImg")]
         [SwaggerResponse(200, "上传成功(data为文件id)", typeof(RestfulData))]
-        public async Task<RestfulData<int>> UploadFile(IFormFile file)
+        public async Task<RestfulData<string>> UploadFile(IFormFile file,int type)
         {
 
             string webRootPath = _hostingEnvironment.WebRootPath;
@@ -53,13 +57,13 @@ namespace zatbAPI.Controllers
             string newFileName = Guid.NewGuid().ToString(); //随机生成新的文件名
             var filePath = uploadPath + newFileName + fileExt;
 
-            // 将文件相关信息存入数据库
-            int fileKey = new DaoBase<Image, int>().Insert(
-                new Image
-                {
-                    Name = file.FileName,
-                    Url = filePath
-                })??0;
+            if (type == 5)
+            {
+                var cUser = Helper.GetCurrentUser(HttpContext);
+                var user = new UserDao().Get(cUser.Id);
+                user.Avatar = filePath;
+                new UserDao().Update(user);
+            }
 
             // 保存文件至本地
             using (var stream = new FileStream(filePath, FileMode.Create))
@@ -67,10 +71,10 @@ namespace zatbAPI.Controllers
 
                 await file.CopyToAsync(stream);
             }
-            return new RestfulData<int>
+            return new RestfulData<string>
             {
                 code =  0,
-                data = fileKey,
+                data = "/upload/"+ newFileName + fileExt,
                 message = "上传成功"
             };
         }
