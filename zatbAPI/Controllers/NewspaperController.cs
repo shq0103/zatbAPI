@@ -74,7 +74,7 @@ namespace zatbAPI.Controllers
         [HttpPost]
         public RestfulData PostNews([FromBody]News newspaper)
         {
-            newspaper.Date = Dateime.GetNowTimestamp();
+            newspaper.Date = Datetime.GetNowTimestamp();
             int newsId= new NewspaperDao().Insert(newspaper)??0;
             if (newspaper.ImgList != null)
             {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace zatbAPI.Utils
 {
-    public static class Dateime
+    public static class Datetime
     {
         public static long GetTimestamp(DateTime dateTime)
         {

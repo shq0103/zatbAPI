@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using zatbAPI.DbHelper;
 using zatbAPI.DbHelper.IRepository;
 using zatbAPI.Models;
 using zatbAPI.Models.RestfulData;
+using zatbAPI.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -50,8 +52,12 @@ namespace zatbAPI.Controllers
         /// <param name="travelBook">路书</param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public RestfulData PostTravelBook([FromBody]TravelBook travelBook)
         {
+            var cUser = Helper.GetCurrentUser(HttpContext);
+            travelBook.PublishTime = Datetime.GetNowTimestamp();
+            travelBook.UserId = cUser.Id;
             int travelBookId = new DaoBase<TravelBook, int>().Insert(travelBook)??0;
             foreach(var item in travelBook.travelPlaces)
             {

@@ -11,7 +11,7 @@ namespace zatbAPI.Models
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// 用户ID
+        /// 用户ID(后端赋值)
         /// </summary>
         [Required]
         public int UserId { get; set; }
@@ -43,7 +43,7 @@ namespace zatbAPI.Models
         /// </summary>
         public int? TakeTime { get; set; }
         /// <summary>
-        /// 发布时间
+        /// 发布时间(后端赋值)
         /// </summary>
         [Required]
         public long PublishTime { get; set; }
@@ -53,18 +53,18 @@ namespace zatbAPI.Models
         [Required]
         public string Length { get; set; }
         /// <summary>
-        /// 浏览量
+        /// 浏览量(后端赋值)
         /// </summary>
         [Required]
         public int ViewCount { get; set; }
 
         /// <summary>
-        /// 路书打卡点
+        /// 路书打卡点列表
         /// </summary>
         public IEnumerable<TravelPlace> travelPlaces { get; set; }
 
         /// <summary>
-        /// 昵称
+        /// 昵称(后端赋值)
         /// </summary>
         public object Nickname { get; set; }
     }
