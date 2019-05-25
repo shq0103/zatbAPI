@@ -15,6 +15,7 @@ namespace zatbAPI.Models
         /// </summary>
         [Required]
         public int UserId { get; set; }
+
         /// <summary>
         /// 标题
         /// </summary>
@@ -56,5 +57,15 @@ namespace zatbAPI.Models
         /// </summary>
         [Required]
         public int ViewCount { get; set; }
+
+        /// <summary>
+        /// 路书打卡点
+        /// </summary>
+        public IEnumerable<TravelPlace> travelPlaces { get; set; }
+
+        /// <summary>
+        /// 昵称
+        /// </summary>
+        public object Nickname { get; set; }
     }
 }

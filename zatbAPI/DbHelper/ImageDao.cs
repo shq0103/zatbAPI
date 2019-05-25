@@ -44,9 +44,9 @@ namespace zatbAPI.DbHelper
         /// <summary>
         /// 更新图片url
         /// </summary>
-        /// <param name="imgList"></param>
-        /// <param name="toId"></param>
-        /// <param name="type"></param>
+        /// <param name="imgList">url数组</param>
+        /// <param name="toId">对应id</param>
+        /// <param name="type">类型（1.新闻,2.活动，3.闲趣，4.打卡点）</param>
         /// <returns></returns>
         public int UpdateImageList(IEnumerable<string> imgList, int toId, int type)
         {

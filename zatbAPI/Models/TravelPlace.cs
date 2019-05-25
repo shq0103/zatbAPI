@@ -34,6 +34,11 @@ namespace zatbAPI.Models
         /// 内容
         /// </summary>
         [Required]
-        public string Content { get; set; }
+        public string Contents { get; set; }
+        /// <summary>
+        /// 图片url列表
+        /// </summary>
+        [Required]
+        public IEnumerable<string> imgList { get; set; }
     }
 }
