@@ -9,7 +9,6 @@ namespace zatbAPI.Models
         /// <summary>
         /// 新闻ID
         /// </summary>
-        [Required]
         public int Id { get; set; }
         /// <summary>
         /// 作者

@@ -9,7 +9,6 @@ namespace zatbAPI.Models
         /// <summary>
         /// 图片ID
         /// </summary>
-        [Required]
         public int Id { get; set; }
         /// <summary>
         /// 图片展现

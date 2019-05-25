@@ -9,7 +9,6 @@ namespace zatbAPI.Models
         /// <summary>
         /// 评论ID
         /// </summary>
-        [Required]
         public int Id { get; set; }
         /// <summary>
         /// 用户ID

@@ -9,7 +9,6 @@ namespace zatbAPI.Models
         /// <summary>
         /// 系统通知ID
         /// </summary>
-        [Required]
         public int Id { get; set; }
         /// <summary>
         /// 通知的用户的ID

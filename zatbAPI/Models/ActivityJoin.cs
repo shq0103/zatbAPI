@@ -9,7 +9,6 @@ namespace zatbAPI.Models
         /// <summary>
         /// 活动报名ID
         /// </summary>
-        [Required]
         public int Id { get; set; }
         /// <summary>
         /// activityID

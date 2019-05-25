@@ -9,6 +9,11 @@
     <DocumentationFile>F:\bishe\zatbAPI\zatbAPI\zatbAPI.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="wwwroot\" />
     <Folder Include="App_Data\" />

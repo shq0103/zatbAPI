@@ -9,7 +9,7 @@ namespace zatbAPI.Models
         /// <summary>
         /// 用户ID
         /// </summary>
-        [Required]
+        
         public int Id { get; set; }
         /// <summary>
         /// 用户名

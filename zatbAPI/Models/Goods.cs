@@ -9,7 +9,6 @@ namespace zatbAPI.Models
         /// <summary>
         /// 闲趣ID
         /// </summary>
-        [Required]
         public int Id { get; set; }
         /// <summary>
         /// 发布用户ID

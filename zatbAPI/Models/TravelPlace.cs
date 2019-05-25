@@ -9,7 +9,6 @@ namespace zatbAPI.Models
         /// <summary>
         /// 打卡点ID
         /// </summary>
-        [Required]
         public int Id { get; set; }
         /// <summary>
         /// 路书ID

@@ -9,7 +9,6 @@ namespace zatbAPI.Models
         /// <summary>
         /// 用户关注ID
         /// </summary>
-        [Required]
         public int Id { get; set; }
         /// <summary>
         /// 被关注人ID
