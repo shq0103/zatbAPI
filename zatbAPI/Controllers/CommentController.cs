@@ -27,8 +27,10 @@ namespace zatbAPI.Controllers
         /// <param name="comment">评论</param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public RestfulData Post([FromBody]Comment comment)
         {
+            comment.UserId= Helper.GetCurrentUser(HttpContext).Id;
             new CommentDao().Insert(comment);
             return new RestfulData
             {

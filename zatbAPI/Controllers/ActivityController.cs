@@ -55,8 +55,10 @@ namespace zatbAPI.Controllers
         /// <param name="activity"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public RestfulData PostActivity([FromBody]Activity activity)
         {
+            activity.UserId = Helper.GetCurrentUser(HttpContext).Id;
             new ActivityDao().Insert(activity);
             return new RestfulData
             {
