@@ -29,12 +29,17 @@ namespace zatbAPI.Models
         /// 经度
         /// </summary>
         [Required]
-        public double Lon { get; set; }
+        public double Lng { get; set; }
         /// <summary>
         /// 内容
         /// </summary>
+        
         [Required]
         public string Contents { get; set; }
+        /// <summary>
+        /// 点赞数
+        /// </summary>
+        public int Star { get; set; }
         /// <summary>
         /// 图片url列表
         /// </summary>

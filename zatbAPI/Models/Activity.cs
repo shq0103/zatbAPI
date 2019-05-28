@@ -69,7 +69,7 @@ namespace zatbAPI.Models
         /// 活动封面图
         /// </summary>
         [Required]
-        public int Image { get; set; }
+        public string Image { get; set; }
         /// <summary>
         /// 活动说明
         /// </summary>

@@ -30,9 +30,9 @@ namespace zatbAPI.Models
         [Required]
         public string Contents { get; set; }
         /// <summary>
-        /// 类型
+        /// 类型（1.打卡点，2.论坛,3.新闻）
         /// </summary>
         [Required]
-        public string Type { get; set; }
+        public int Type { get; set; }
     }
 }

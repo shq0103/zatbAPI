@@ -1,6 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using zatbAPI.DbHelper;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Annotations;
+using zatbAPI.DbHelper.IRepository;
 using zatbAPI.Models;
+using zatbAPI.Models.Forms;
+using zatbAPI.Models.RestfulData;
+using zatbAPI.Utils;
+using zatbAPI.DbHelper;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,24 +26,42 @@ namespace zatbAPI.Controllers
     public class ActivityController : Controller
     {
         // GET: api/<controller>
-    //    [HttpGet]
- //       public IEnumerable<string> Get()
-  //      {
-  //          return new string[] { "value1", "value2" };
-  //      }
-
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public Activity Get(int id)
+        [HttpGet]
+        public IEnumerable<string> GetActivityList()
         {
-            return new ActivityDao().Get(id);
+            return new string[] { "value1", "value2" };
         }
 
-        // POST api/<controller>
+        /// <summary>
+        /// 获取某个活动
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public RestfulData<Activity> GetActivity(int id)
+        {
+            var act = new ActivityDao().Get(id);
+            act.ViewCount += 1;
+            new ActivityDao().Update(act);
+            return new RestfulData<Activity>
+            {
+                data = act
+            };
+        }
+
+        /// <summary>
+        /// 新增活动
+        /// </summary>
+        /// <param name="activity"></param>
+        /// <returns></returns>
         [HttpPost]
-        public void Post([FromBody]Activity activity)
+        public RestfulData PostActivity([FromBody]Activity activity)
         {
             new ActivityDao().Insert(activity);
+            return new RestfulData
+            {
+                message="新增成功"
+            };
         }
 
         // PUT api/<controller>/5

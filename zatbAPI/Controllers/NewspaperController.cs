@@ -46,7 +46,8 @@ namespace zatbAPI.Controllers
             }
             return new RestfulArray<News>
             {
-                data = newsList
+                data = newsList,
+                total= total
             };
         }
         /// <summary>
@@ -99,11 +100,19 @@ namespace zatbAPI.Controllers
             };
         }
 
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public RestfulData Delete(int id)
+        /// <summary>
+        /// 删除新闻
+        /// </summary>
+        /// <param name="id">id数组</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public RestfulData Delete([FromBody]int[] id)
         {
-            new NewspaperDao().Delete(id);
+            foreach(var item in id)
+            {
+                new NewspaperDao().Delete(item);
+            }
+            
             return new RestfulData
             {
                 message = "删除成功！"

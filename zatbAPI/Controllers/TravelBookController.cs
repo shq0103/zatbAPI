@@ -17,11 +17,38 @@ namespace zatbAPI.Controllers
     [Route("api/[controller]")]
     public class TravelBookController : Controller
     {
-        // GET: api/<controller>
+        /// <summary>
+        /// 获取路书列表
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="orderBy">选填（publishTime.时间，viewCount.浏览量,star点赞量）</param>
+        /// <returns></returns>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public RestfulArray<TravelBookView> GetList(int? page,int? pageSize,string orderBy)
         {
-            return new string[] { "value1", "value2" };
+            string conditions = " where 1=1";
+
+            string mOrderBy = "";
+            if (orderBy != null)
+            {
+                mOrderBy = orderBy + " desc";
+            }
+            var traveltreList = new DaoBase<TravelBookView, int>().GetListPaged(page ?? 1, pageSize ?? 20, conditions, mOrderBy, null);
+            var total = new DaoBase<TravelBookView, int>().RecordCount(conditions);
+            foreach (var item in traveltreList)
+            {
+                item.travelPlaces = new DaoBase<TravelPlace, int>().GetList("where bookId=@bookId", new { bookId = item.Id });
+
+                foreach(var ele in item.travelPlaces)
+                {
+                    ele.imgList = new ImageDao().GetImageList(ele.Id, 4);
+                }
+            }
+            return new RestfulArray<TravelBookView> {
+            data=traveltreList,
+            total=total
+            };
         }
 
         /// <summary>
@@ -30,10 +57,10 @@ namespace zatbAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public RestfulData<TravelBook> GetTravelBook(int id)
+        public RestfulData<TravelBookView> GetTravelBook(int id)
         {
-            var tb = new DaoBase<TravelBook, int>().Get(id);
-            tb.Nickname = new UserDao().Get(tb.UserId).Nickname;
+            var tb = new DaoBase<TravelBookView, int>().Get(id);
+  
             
             tb.ViewCount += 1;
             new DaoBase<TravelBook, int>().Update(tb);
@@ -42,7 +69,7 @@ namespace zatbAPI.Controllers
             {
                 item.imgList = new ImageDao().GetImageList(item.Id, 4);
             }
-            return new RestfulData<TravelBook> {
+            return new RestfulData<TravelBookView> {
             data=tb};
         }
 
@@ -68,16 +95,65 @@ namespace zatbAPI.Controllers
             return new RestfulData { };
         }
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        /// <summary>
+        /// 更新路书
+        /// </summary>
+        /// <param name="travelBook">路书实体</param>
+        [HttpPut]
+        public RestfulData PutTravelBook([FromBody]TravelBook travelBook)
         {
+            new DaoBase<TravelBook, int>().Update(travelBook);
+            foreach(var place in travelBook.travelPlaces)
+            {
+                new DaoBase<TravelPlace, int>().Update(place);
+                new ImageDao().UpdateImageList(place.imgList, place.Id, 4);
+            }
+            return new RestfulData
+            {
+                message = "更新成功！"
+            };
         }
 
-        // DELETE api/<controller>/5
+        /// <summary>
+        /// 删除路书
+        /// </summary>
+        /// <param name="id">路书id</param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public RestfulData DeleteTravelBook(int id)
         {
+            new DaoBase<TravelPlace, int>().DeleteList("where bookId=bookId", new { bookId = id });
+            new DaoBase<TravelBook, int>().Delete(id);
+            return new RestfulData
+            {
+                message = "删除成功！"
+            };
+        }
+
+        /// <summary>
+        /// 点赞
+        /// </summary>
+        /// <param name="id">点赞id</param>
+        /// <param name="type">点赞类型(1.路书,2.打卡点)</param>
+        /// <returns></returns>
+        [HttpPut("star")]
+        public RestfulData PutStar(int id,int type)
+        {
+
+            if (type == 1)
+            {
+                var book = new DaoBase<TravelBook, int>().Get(id);
+                book.Star += 1;
+                new DaoBase<TravelBook, int>().Update(book);
+            }else if (type == 2)
+            {
+                var place = new DaoBase<TravelPlace, int>().Get(id);
+                place.Star += 1;
+                new DaoBase<TravelPlace, int>().Update(place);
+            }
+            return new RestfulData
+            {
+                message = "更新成功！"
+            };
         }
     }
 }

@@ -59,13 +59,14 @@ namespace zatbAPI.Models
         public int ViewCount { get; set; }
 
         /// <summary>
+        /// 点赞数(后端赋值)
+        /// </summary>
+        [Required]
+        public int Star { get; set; }
+
+        /// <summary>
         /// 路书打卡点列表
         /// </summary>
         public IEnumerable<TravelPlace> travelPlaces { get; set; }
-
-        /// <summary>
-        /// 昵称(后端赋值)
-        /// </summary>
-        public object Nickname { get; set; }
     }
 }

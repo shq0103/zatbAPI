@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using zatbAPI.DbHelper;
 using zatbAPI.Models;
+using zatbAPI.Models.RestfulData;
 using zatbAPI.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,12 +21,19 @@ namespace zatbAPI.Controllers
             return new CommentDao().Get(id);
         }
 
-        // POST api/<controller>
-        
+        /// <summary>
+        /// 评论
+        /// </summary>
+        /// <param name="comment">评论</param>
+        /// <returns></returns>
         [HttpPost]
-        public void Post([FromBody]Comment comment)
+        public RestfulData Post([FromBody]Comment comment)
         {
             new CommentDao().Insert(comment);
+            return new RestfulData
+            {
+                message = "评论成功！"
+            };
         }
 
         // PUT api/<controller>/5

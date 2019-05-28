@@ -49,9 +49,13 @@ namespace zatbAPI.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public RestfulData Delete(int id)
         {
             new PostDao().Delete(id);
+            return new RestfulData
+            {
+                message = "删除成功"
+            };
         }
     }
 }

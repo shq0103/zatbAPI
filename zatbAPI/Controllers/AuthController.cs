@@ -108,7 +108,23 @@ namespace zatbAPI.Controllers
             return res;
         }
 
-
+        /// <summary>
+        /// 检测用户名是否已存在
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [HttpGet("getUserName")]
+        [SwaggerResponse(200, "操作成功", typeof(RestfulData))]
+        public RestfulData GetUserName(string username)
+        {
+            var result = new RestfulData();
+            var data = new UserDao().GetUserName(username);
+            if (!string.IsNullOrEmpty(data))
+            {
+                result.message = "用户名已存在";
+            }
+            return result;
+        }
 
         /// <summary>
         /// 用户注册
@@ -120,6 +136,7 @@ namespace zatbAPI.Controllers
             
             var result = new RestfulData();
             int i = 0;
+            user.Nickname = user.Username;
             user.Role = "user";
                  i= new UserDao().Insert(user) ?? 0;
 

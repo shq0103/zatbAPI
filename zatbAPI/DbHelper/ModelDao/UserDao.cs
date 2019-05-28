@@ -15,5 +15,10 @@ namespace zatbAPI.DbHelper.IRepository
             return GetAsync("select * from [user] where (username=@username or mail=@username) and password=@password", 
                 new { username, password });
         }
+        public string GetUserName(string username)
+        {
+            var user = Get("select * from [user] where username=@username", new { username });
+            return user == null ? "" : user.Username;
+        }
     }
 }
