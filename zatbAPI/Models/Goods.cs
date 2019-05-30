@@ -46,10 +46,10 @@ namespace zatbAPI.Models
         [Required]
         public long Time { get; set; }
         /// <summary>
-        /// 商品类别
+        /// 商品类别(1.服装2.装备3.其它)
         /// </summary>
         [Required]
-        public string Type { get; set; }
+        public int Type { get; set; }
         /// <summary>
         /// 联系方式
         /// </summary>
@@ -58,5 +58,14 @@ namespace zatbAPI.Models
         /// 所在地
         /// </summary>
         public string Place { get; set; }
+        /// <summary>
+        /// 商品图片
+        /// </summary>
+        public IEnumerable<string> imgList { get; set; }
+        /// <summary>
+        /// 浏览量
+        /// </summary>
+        
+        public int viewCount { get; set; }
     }
 }

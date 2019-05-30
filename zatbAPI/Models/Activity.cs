@@ -54,6 +54,11 @@ namespace zatbAPI.Models
         /// 活动名额
         /// </summary>
         [Required]
+        public int Signin { get; set; }
+        /// <summary>
+        /// 活动名额
+        /// </summary>
+        [Required]
         public int Quota { get; set; }
         /// <summary>
         /// 费用
@@ -104,5 +109,11 @@ namespace zatbAPI.Models
         /// 更多介绍
         /// </summary>
         public string MoreInfo { get; set; }
+
+        /// <summary>
+        /// 发布时间
+        /// </summary>
+        [Required]
+        public long PublishTime { get; set; }
     }
 }

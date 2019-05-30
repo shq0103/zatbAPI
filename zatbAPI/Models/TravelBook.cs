@@ -51,7 +51,7 @@ namespace zatbAPI.Models
         /// 线路长短
         /// </summary>
         [Required]
-        public string Length { get; set; }
+        public int Length { get; set; }
         /// <summary>
         /// 浏览量(后端赋值)
         /// </summary>
@@ -63,6 +63,13 @@ namespace zatbAPI.Models
         /// </summary>
         [Required]
         public int Star { get; set; }
+
+        /// <summary>
+        /// 审核状态(0.待审核,1.审核通过,2.审核不通过)
+        /// </summary>
+        [Required]
+        public int Status { get; set; }
+
 
         /// <summary>
         /// 路书打卡点列表

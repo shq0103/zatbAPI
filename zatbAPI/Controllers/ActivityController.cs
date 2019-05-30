@@ -39,16 +39,20 @@ namespace zatbAPI.Controllers
         /// <param name="orderBy">可选，排序</param>
         /// <returns></returns>
         [HttpGet]
-        public RestfulArray<ActivityView> GetActivityList(int page,int pageSize,int status,string keyword,string user,int theme, long startDate,long endDate,string orderBy)
+        public RestfulArray<ActivityView> GetActivityList(int page,int pageSize,int? status,string keyword,string user,int theme, long startDate,long endDate,string orderBy)
         {
             string con = "where 1=1";
-            if (keyword != null)
+            if (!string.IsNullOrEmpty(keyword))
             {
-                con += string.Format(" and name={0}", keyword);
+                con += string.Format(" and name like N'%{0}%'", keyword);
             }
-            if (user != null)
+            if (status!=null)
             {
-                con += string.Format(" and (username={0} or nickname={0})", keyword);
+                con += string.Format(" and status={0}'", status);
+            }
+            if (!string.IsNullOrEmpty(user))
+            {
+                con += string.Format(" and (username='{0}' or nickname='{0}')", user);
             }
             if (theme != 0)
             {
@@ -63,13 +67,14 @@ namespace zatbAPI.Controllers
             }
 
             string mOrderBy = "";
-            if (orderBy != null)
+            if (!string.IsNullOrEmpty(orderBy))
             {
                 mOrderBy = orderBy + " desc";
             }
 
             var data= new DaoBase<ActivityView, int>().GetListPaged(page, pageSize, con, mOrderBy);
-            foreach(var item in data)
+            var total = new DaoBase<ActivityView, int>().RecordCount(con);
+            foreach (var item in data)
             {
                 var joinList = new DaoBase<ActivityJoinView, int>().GetList("where activityID=@activityID", new { activityID = item.Id });
                 foreach(var el in joinList)
@@ -86,7 +91,7 @@ namespace zatbAPI.Controllers
             return new RestfulArray<ActivityView>
             {
                 data = data,
-                total = new DaoBase<ActivityJoinView, int>().RecordCount(con)
+                total = total
             };
         }
 
@@ -126,7 +131,9 @@ namespace zatbAPI.Controllers
         [Authorize]
         public RestfulData PostActivity([FromBody]Activity activity)
         {
-            activity.UserId = Helper.GetCurrentUser(HttpContext).Id;
+            var cUser= Helper.GetCurrentUser(HttpContext);
+            activity.UserId = cUser.Id;
+            activity.PublishTime = Datetime.GetNowTimestamp();
             new ActivityDao().Insert(activity);
             return new RestfulData
             {

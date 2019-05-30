@@ -22,12 +22,17 @@ namespace zatbAPI.Controllers
         /// </summary>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
+        /// <param name="status">状态（选填，0.待审核1.审核通过2.审核不通过）</param>
         /// <param name="orderBy">选填（publishTime.时间，viewCount.浏览量,star点赞量）</param>
         /// <returns></returns>
         [HttpGet]
-        public RestfulArray<TravelBookView> GetList(int? page,int? pageSize,string orderBy)
+        public RestfulArray<TravelBookView> GetList(int? page,int? pageSize,int? status,string orderBy)
         {
             string conditions = " where 1=1";
+            if (status != null)
+            {
+                conditions += string.Format(" and status={0}", status);
+            }
 
             string mOrderBy = "";
             if (orderBy != null)
@@ -50,7 +55,33 @@ namespace zatbAPI.Controllers
             total=total
             };
         }
+        /// <summary>
+        /// 获取当前登录用户发布的路书
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet("user")]
+        public RestfulArray<TravelBookView> GetUserTravelBook(int? page,int? pageSize)
+        {
+            var userId = Helper.GetCurrentUser(HttpContext).Id;
+            var traveltreList = new DaoBase<TravelBookView, int>().GetListPaged(page ?? 1, pageSize ?? 20, "where userId=@userId", null, new { userId});
+            var total = new DaoBase<TravelBookView, int>().RecordCount("where userId=@userId", new { userId });
+            foreach (var item in traveltreList)
+            {
+                item.travelPlaces = new DaoBase<TravelPlace, int>().GetList("where bookId=@bookId", new { bookId = item.Id });
 
+                foreach (var ele in item.travelPlaces)
+                {
+                    ele.imgList = new ImageDao().GetImageList(ele.Id, 4);
+                }
+            }
+            return new RestfulArray<TravelBookView>
+            {
+                data=traveltreList,
+                total=total
+            };
+        }
         /// <summary>
         /// 获取某条路书
         /// </summary>
@@ -95,6 +126,22 @@ namespace zatbAPI.Controllers
             return new RestfulData { };
         }
 
+        /// <summary>
+        /// 审核路书
+        /// </summary>
+        /// <param name="id">路书id</param>
+        /// <param name="status">状态（1.通过，2.不通过）</param>
+        /// <returns></returns>
+        [HttpPut("status")]
+        public RestfulData PutTravelBookStatus(int id,int status)
+        {
+            var book= new DaoBase<TravelBook, int>().Get(id);
+
+            book.Status = status;
+            new DaoBase<TravelBook, int>().Update(book);
+            return new RestfulData {
+            message="审核成功"};
+        }
         /// <summary>
         /// 更新路书
         /// </summary>

@@ -40,6 +40,16 @@ namespace zatbAPI.Controllers
         [HttpPost]
         public RestfulData PostActivityJoin([FromBody]ActivityJoin activityJoin)
         {
+            var aj = new DaoBase<ActivityJoin, int>().Get("where activityId=@activityId and userId=@userId",
+                new { activityId = activityJoin.ActivityId, userId = Helper.GetCurrentUser(HttpContext).Id });
+            if (aj != null)
+            {
+                return new RestfulData
+                {
+                    code = 400,
+                    message = "已报名！"
+                };
+            }
             activityJoin.UserId = Helper.GetCurrentUser(HttpContext).Id;
             new DaoBase<ActivityJoin, int>().Insert(activityJoin);
             return new RestfulData
