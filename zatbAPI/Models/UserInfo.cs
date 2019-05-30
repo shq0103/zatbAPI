@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 namespace zatbAPI.Models
 {
     public class UserInfo
+
     {
-        /// 角色数组
-        /// </summary>
+        /// <summary>
+     /// 角色数组
+     /// </summary>
         public IEnumerable<string> Roles { get; set; }
         /// <summary>
         /// 昵称

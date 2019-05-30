@@ -21,10 +21,15 @@ namespace zatbAPI.Models
         [Required]
         public string Name { get; set; }
         /// <summary>
-        /// 活动时间
+        /// 开始时间
         /// </summary>
         [Required]
-        public long Date { get; set; }
+        public long startDate { get; set; }
+        /// <summary>
+        /// 结束时间
+        /// </summary>
+        [Required]
+        public long endDate { get; set; }
         /// <summary>
         /// 活动报名截止时间
         /// </summary>
@@ -41,10 +46,10 @@ namespace zatbAPI.Models
         [Required]
         public string StartPlace { get; set; }
         /// <summary>
-        /// 线路长短
+        /// 线路长短(1.短信,2.中线,3.长线,4.其它)
         /// </summary>
         [Required]
-        public string Theme { get; set; }
+        public int Theme { get; set; }
         /// <summary>
         /// 活动名额
         /// </summary>

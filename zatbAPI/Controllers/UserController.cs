@@ -59,10 +59,7 @@ namespace zatbAPI.Controllers
             {
                 re.data = new DaoBase<User, int>().Get(cUser.Id);
             }
-            return new RestfulData<User>
-            {
-
-            };
+            return re;
         }
 
  
