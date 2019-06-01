@@ -18,11 +18,13 @@ namespace zatbAPI.Controllers
         /// </summary>
         /// <param name="page">当前页</param>
         /// <param name="pageSize">每页数目</param>
+        /// <param name="title">标题</param>
+        /// <param name="author">作者</param>
         /// <param name="type">类型(选填，1.咨询，2.户外技巧，3.户外常识，4.户外装备,5.户外知识即2、3、4)</param>
         /// <param name="orderBy">排序(选填，date.最新,viewCount.热门)</param>
         /// <returns></returns>
         [HttpGet]
-        public RestfulArray<News> GetNewsList(int? page, int? pageSize, int? type,string orderBy)
+        public RestfulArray<News> GetNewsList(int? page, int? pageSize,string title,string author, int? type,string orderBy)
         {
             string conditions = " where 1=1";
             if (type != null)
@@ -32,6 +34,14 @@ namespace zatbAPI.Controllers
                 {
                     conditions = string.Format(" where type>1");
                 }
+            }
+            if (!string.IsNullOrEmpty(title))
+            {
+                conditions += string.Format(" and title like N'%{0}%'", title);
+            }
+            if (!string.IsNullOrEmpty(author))
+            {
+                conditions += string.Format(" and author like N'%{0}%'", author);
             }
             string mOrderBy = "";
             if (orderBy != null)
@@ -71,7 +81,6 @@ namespace zatbAPI.Controllers
         /// 发布新闻
         /// </summary>
         /// <param name="newspaper">新闻实体</param>
-        /// <param name="imgList">图片列表</param>
         [HttpPost]
         public RestfulData PostNews([FromBody]News newspaper)
         {

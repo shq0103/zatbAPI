@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using zatbAPI.DbHelper;
+using zatbAPI.DbHelper.IRepository;
 using zatbAPI.Models;
 using zatbAPI.Models.RestfulData;
 using zatbAPI.Utils;
@@ -14,11 +15,31 @@ namespace zatbAPI.Controllers
     [Route("api/[controller]")]
     public class CommentController : Controller
     {
-        [HttpGet("{id}")]
-        public Comment Get(int id)
+        /// <summary>
+        /// 获取评论列表
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="toId">针对的id</param>
+        /// <param name="type">类型（1.打卡点，2.论坛,3.新闻）</param>
+        /// <returns></returns>
+        [HttpGet]
+        public RestfulArray<Comment> GetCommentList(int page,int pageSize,int? toId,int? type)
         {
-            var cUser = Helper.GetCurrentUser(HttpContext);
-            return new CommentDao().Get(id);
+            string con = "where 1=1";
+            if (toId != null)
+            {
+                con += string.Format(" and toId={0}", toId);
+            }
+            if (type != null)
+            {
+                con += string.Format(" and type={0}", type);
+            }
+            return new RestfulArray<Comment>
+            {
+                data=new CommentDao().GetListPaged(page,pageSize,con,"time"),
+                total= new CommentDao().RecordCount(con)
+            };
         }
 
         /// <summary>
@@ -30,26 +51,48 @@ namespace zatbAPI.Controllers
         [Authorize]
         public RestfulData Post([FromBody]Comment comment)
         {
+            var cUser = Helper.GetCurrentUser(HttpContext);
+            var user = new UserDao().Get(cUser.Id);
+            if (user.Status == 1)
+            {
+                return new RestfulData
+                {
+                    code = 400,
+                    message = "您已被禁言"
+                };
+            }
+            comment.Time = Datetime.GetNowTimestamp();
             comment.UserId= Helper.GetCurrentUser(HttpContext).Id;
             new CommentDao().Insert(comment);
+            if (comment.Type == 2)
+            {
+                var date = new PostDao().Get(comment.ToId);
+                date.replyDate = Datetime.GetNowTimestamp();
+                new PostDao().Update(date);
+            }
             return new RestfulData
             {
                 message = "评论成功！"
             };
         }
 
-        // PUT api/<controller>/5
-        [HttpPut]
-        public void Put( [FromBody]Comment comment)
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public RestfulData Delete([FromBody]int[] id)
         {
-            new CommentDao().Update(comment);
-        }
+            foreach (var item in id)
+            {
+                new DaoBase<Comment, int>().Delete(item);
+            }
 
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-            new CommentDao().Delete(id);
+            return new RestfulData
+            {
+                message = "删除成功！"
+            };
         }
     }
 }

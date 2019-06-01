@@ -17,31 +17,41 @@ namespace zatbAPI.Controllers
         /// </summary>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
+        /// <param name="type">类型（可选，1.服装2.装备3.其它）</param>
+        /// <param name="username">发布者用户名</param>
         /// <param name="keyword">查询参数</param>
         /// <param name="orderBy">viewCount</param>
         /// <returns></returns>
         [HttpGet]
-        public RestfulArray<Goods> GetGoodsList(int page,int pageSize,string keyword,string orderBy)
+        public RestfulArray<GoodsView> GetGoodsList(int page,int pageSize,int? type,string username,string keyword,string orderBy)
         {
-            string con = "";
-            if (string.IsNullOrEmpty(keyword))
+            string con = "where 1=1";
+            if (!string.IsNullOrEmpty(keyword))
             {
-                con = string.Format("where name like N'%{0}% or introduction like N'%{0}%'", keyword);
+                con += string.Format(" and name like N'%{0}%'", keyword);
+            }
+            if (!string.IsNullOrEmpty(username))
+            {
+                con += string.Format(" and username like N'%{0}%'", username);
+            }
+            if (type!=null)
+            {
+                con += string.Format(" and type={0}", type);
             }
             string mOrderBy = null;
-            if (string.IsNullOrEmpty(orderBy))
+            if (!string.IsNullOrEmpty(orderBy))
             {
                 mOrderBy = orderBy + " desc";
             }
-            var data = new GoodsDao().GetListPaged(page, pageSize, con, mOrderBy);
+            var data = new DaoBase<GoodsView,int>().GetListPaged(page, pageSize, con, mOrderBy);
             foreach(var item in data)
             {
                 item.imgList = new ImageDao().GetImageList(item.Id, 3);
             }
-            return new RestfulArray<Goods>
+            return new RestfulArray<GoodsView>
             {
                 data = data,
-                total = new GoodsDao().RecordCount(con)
+                total = new DaoBase<GoodsView, int>().RecordCount(con)
             };
         }
 

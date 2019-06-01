@@ -16,12 +16,12 @@ namespace zatbAPI.Models
         [Required]
         public int TouserId { get; set; }
         /// <summary>
-        /// 类型
+        /// 类型(1.系统通知)
         /// </summary>
         [Required]
         public int Type { get; set; }
         /// <summary>
-        /// 状态
+        /// 状态（0.未读，1.已读）
         /// </summary>
         [Required]
         public int Status { get; set; }

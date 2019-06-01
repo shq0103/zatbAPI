@@ -50,7 +50,6 @@ namespace zatbAPI.DbHelper
         /// <returns></returns>
         public int UpdateImageList(IEnumerable<string> imgList, int toId, int type)
         {
-            int i = 0;
             DeleteList("where toId=@toId and type=@type", new { toId, type });
             return InsertImageList(imgList, toId, type);
         }

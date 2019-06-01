@@ -31,7 +31,7 @@ namespace zatbAPI.Models
         [Required]
         public long Date { get; set; }
         /// <summary>
-        /// 类型
+        /// 类型(1.户外文档，2.装备问答，3.线路问答，4.旅途观光)
         /// </summary>
         [Required]
         public string Type { get; set; }
@@ -40,5 +40,10 @@ namespace zatbAPI.Models
         /// </summary>
         [Required]
         public int ViewCount { get; set; }
+        /// <summary>
+        /// 最新回复时间
+        /// </summary>
+        [Required]
+        public long? replyDate { get; set; }
     }
 }

@@ -31,10 +31,10 @@ namespace zatbAPI.Models
         [Required]
         public int Price { get; set; }
         /// <summary>
-        /// 新旧程度
+        /// 新旧程度(全新100，九成90，以此类推)
         /// </summary>
         [Required]
-        public string Extent { get; set; }
+        public int Extent { get; set; }
         /// <summary>
         /// 转卖价格
         /// </summary>

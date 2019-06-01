@@ -48,7 +48,7 @@ namespace zatbAPI.Controllers
             }
             if (status!=null)
             {
-                con += string.Format(" and status={0}'", status);
+                con += string.Format(" and status={0}", status);
             }
             if (!string.IsNullOrEmpty(user))
             {
@@ -133,6 +133,10 @@ namespace zatbAPI.Controllers
         {
             var cUser= Helper.GetCurrentUser(HttpContext);
             activity.UserId = cUser.Id;
+            if (string.Equals(cUser.Role, "admin"))
+            {
+                activity.Status = 1;
+            }
             activity.PublishTime = Datetime.GetNowTimestamp();
             new ActivityDao().Insert(activity);
             return new RestfulData
@@ -174,13 +178,18 @@ namespace zatbAPI.Controllers
         }
 
         /// <summary>
-        /// 删除某个活动
+        /// 删除活动
         /// </summary>
         /// <param name="id"></param>
-        [HttpDelete("{id}")]
-        public RestfulData Delete(int id)
+        [HttpDelete]
+        public RestfulData Delete([FromBody]int[] id)
         {
-            new ActivityDao().Delete(id);
+            foreach (var item in id)
+            {
+                new DaoBase<Activity, int>().Delete(item);
+                new DaoBase<ActivityJoin, int>().DeleteList("where activityId=@activityId", new { activityId = item });
+            }
+
             return new RestfulData
             {
                 message = "删除成功！"

@@ -33,9 +33,13 @@ namespace zatbAPI.Controllers
         {
             var result = new RestfulData<TokenObj>();
             //验证用户名和密码
+            signinForm.password = Helper.GetMd5(signinForm.password);
             var userInfo = await new UserDao().GetUser(signinForm.username, signinForm.password);
+
             if (userInfo != null)
             {
+                userInfo.LastTime = Datetime.GetNowTimestamp();
+                new UserDao().Update(userInfo);
                 var claims = new Claim[]
                 {
                    new Claim(ClaimTypes.Sid,userInfo.Id.ToString()),
@@ -137,6 +141,7 @@ namespace zatbAPI.Controllers
             var result = new RestfulData();
             int i = 0;
             user.Nickname = user.Username;
+            user.Password = Helper.GetMd5(user.Password);
             user.Role = "user";
                  i= new UserDao().Insert(user) ?? 0;
 

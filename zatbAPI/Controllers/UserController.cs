@@ -22,15 +22,25 @@ namespace zatbAPI.Controllers
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
         /// <param name="keyword"></param>
+        /// <param name="gender"></param>
+        /// <param name="status"></param>
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public RestfulArray<User> GetUserList(int page,int pageSize,string keyword)
+        public RestfulArray<User> GetUserList(int page,int pageSize,string keyword,int? gender,int? status)
         {
-            string con = null;
+            string con = "where 1=1";
             if (!string.IsNullOrEmpty(keyword))
             {
-                con = string.Format("where username={0} or nickname={0}", keyword);
+                con += string.Format(" and username like N'{0}' or nickname like N'{0}'", keyword);
+            }
+            if (gender != null)
+            {
+                con += string.Format(" and gender={0}", gender);
+            }
+            if (status != null)
+            {
+                con += string.Format(" and status={0}", status);
             }
             var list = new DaoBase<User, int>().GetListPaged(page, pageSize, con, null);
             return new RestfulArray<User>
@@ -71,6 +81,7 @@ namespace zatbAPI.Controllers
         [HttpPut]
         public RestfulData PutUser([FromBody]User user)
         {
+            user.Password = Helper.GetMd5(user.Password);
             new DaoBase<User, int>().Update(user);
             return new RestfulData
             {
@@ -82,10 +93,14 @@ namespace zatbAPI.Controllers
         /// 删除某个用户
         /// </summary>
         /// <param name="id"></param>
-        [HttpDelete("{id}")]
-        public RestfulData Delete(int id)
+        [HttpDelete]
+        public RestfulData Delete([FromBody]int[] id)
         {
-            new DaoBase<User, int>().Delete(id);
+            foreach (var item in id)
+            {
+                new DaoBase<User, int>().Delete(item);
+            }
+
             return new RestfulData
             {
                 message = "删除成功！"

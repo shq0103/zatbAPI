@@ -34,5 +34,9 @@ namespace zatbAPI.Models
         /// </summary>
         [Required]
         public int Type { get; set; }
+        /// <summary>
+        /// 时间
+        /// </summary>
+        public long Time { get; set; }
     }
 }
