@@ -29,7 +29,7 @@ namespace zatbAPI.Models
         /// 内容
         /// </summary>
         [Required]
-        public string Content { get; set; }
+        public string Contents { get; set; }
         /// <summary>
         /// 时间
         /// </summary>

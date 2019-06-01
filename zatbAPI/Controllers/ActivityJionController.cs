@@ -53,8 +53,10 @@ namespace zatbAPI.Controllers
             }
 
 
-            var aj = new DaoBase<ActivityJoin, int>().Get("where activityId=@activityId and userId=@userId",
-                new { activityId = activityJoin.ActivityId, userId = Helper.GetCurrentUser(HttpContext).Id });                   
+            var aj = new DaoBase<ActivityJoin, int>().Get(
+                string.Format("select * from activityJoin where activityID={0} and userId={1}", 
+                activityJoin.ActivityId, Helper.GetCurrentUser(HttpContext).Id)
+                );                   
             if (aj != null)
             {
                 return new RestfulData
@@ -79,7 +81,7 @@ namespace zatbAPI.Controllers
         /// </summary>
         /// <param name="id">报名id</param>
         /// <param name="status">审核状态（1.通过，2.不通过）</param>
-        [HttpPut("{id}")]
+        [HttpPut]
         public RestfulData PutActivity(int id, int status)
         {
             var data = new DaoBase<ActivityJoin, int>().Get(id);

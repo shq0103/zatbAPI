@@ -167,7 +167,7 @@ namespace zatbAPI.Controllers
             {
                 Type = 1,
                 Status = 0,
-                Content = status == 2 ? "您的路书审核不通过，请做出修改！" : "您的路书审核通过！",
+                Contents = status == 2 ? "您的路书审核不通过，请做出修改！" : "您的路书审核通过！",
                 Time = Datetime.GetNowTimestamp(),
                 TouserId = book.UserId,
 

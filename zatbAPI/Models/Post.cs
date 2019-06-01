@@ -34,7 +34,7 @@ namespace zatbAPI.Models
         /// 类型(1.户外文档，2.装备问答，3.线路问答，4.旅途观光)
         /// </summary>
         [Required]
-        public string Type { get; set; }
+        public int Type { get; set; }
         /// <summary>
         /// 浏览量
         /// </summary>

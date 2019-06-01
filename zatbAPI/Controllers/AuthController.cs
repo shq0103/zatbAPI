@@ -142,6 +142,8 @@ namespace zatbAPI.Controllers
             int i = 0;
             user.Nickname = user.Username;
             user.Password = Helper.GetMd5(user.Password);
+            user.Avatar =
+                "/upload/defaultA.png";
             user.Role = "user";
                  i= new UserDao().Insert(user) ?? 0;
 

@@ -76,16 +76,18 @@ namespace zatbAPI.Controllers
             var total = new DaoBase<ActivityView, int>().RecordCount(con);
             foreach (var item in data)
             {
-                var joinList = new DaoBase<ActivityJoinView, int>().GetList("where activityID=@activityID", new { activityID = item.Id });
-                foreach(var el in joinList)
+                var joinList = new DaoBase<ActivityJoinView, int>().GetList(string.Format("where activityID={0}", item.Id));
+                List<UserView> list = new List<UserView>();
+                foreach (var el in joinList)
                 {
-                    item.joinList.Append(new UserView
+
+                    list.Add(new UserView
                     {
                         Nickname = el.Nickname,
                         Avatar=el.Avatar
                     });
                 }
-
+                item.joinList = list;
             }
 
             return new RestfulArray<ActivityView>
@@ -164,7 +166,7 @@ namespace zatbAPI.Controllers
         /// <param name="id">活动id</param>
         /// <param name="status">审核状态（1.通过，2.不通过）</param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("status")]
         public RestfulData StstutsActivity(int id,int status)
         {
             var data=new DaoBase<Activity, int>().Get(id);
