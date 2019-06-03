@@ -66,7 +66,7 @@ namespace zatbAPI.Controllers
             {
                 result.message = "账号或密码错误";
                 result.code = 400;
-                return BadRequest(result);
+                return Ok(result);
             }
 
         }

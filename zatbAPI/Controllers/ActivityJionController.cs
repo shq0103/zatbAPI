@@ -113,10 +113,23 @@ namespace zatbAPI.Controllers
 
         }
 
-        // DELETE api/<controller>/5
+        /// <summary>
+        /// 删除用户报名
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public RestfulData Delete(int id)
         {
+            var aj = new DaoBase<ActivityJoin, int>().Get(id);
+            var ac = new DaoBase<Activity, int>().Get(aj.ActivityId);
+            ac.Signin -= 1;
+            new DaoBase<Activity, int>().Update(ac);
+            new DaoBase<ActivityJoin, int>().Delete(id);
+            return new RestfulData
+            {
+                
+            };
         }
     }
 }

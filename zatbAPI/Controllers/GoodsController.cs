@@ -61,16 +61,17 @@ namespace zatbAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public RestfulData< Goods> GetGoods(int id)
+        public RestfulData<GoodsView> GetGoods(int id)
         {
             var good = new GoodsDao().Get(id);
             good.viewCount += 1;
             new GoodsDao().Update(good);
-            good.imgList = new ImageDao().GetImageList(id, 3);
+            var goodV = new DaoBase<GoodsView, int>().Get(id);
+            goodV.imgList = new ImageDao().GetImageList(id, 3);
 
-            return new RestfulData<Goods>
+            return new RestfulData<GoodsView>
             {
-                data= good
+                data= goodV
             };
         }
 
