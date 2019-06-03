@@ -63,7 +63,7 @@ namespace zatbAPI.Controllers
                 con += string.Format(" and startDate>={0} and endDate<={1}", startDate, endDate);
             }else if (startDate != 0)
             {
-                con += string.Format(" and startDate={0}", startDate);
+                con += string.Format(" and startDate>{0}", startDate);
             }
 
             string mOrderBy = "";
@@ -112,11 +112,13 @@ namespace zatbAPI.Controllers
             var joinList = new DaoBase<ActivityJoinView, int>().GetList("where activityID=@activityID", new { activityID = id });
             foreach (var el in joinList)
             {
-                actView.joinList.Append(new UserView
+                List<UserView> list = new List<UserView>();
+                list.Add(new UserView
                 {
                     Nickname = el.Nickname,
                     Avatar = el.Avatar
                 });
+                actView.joinList = list;
             }
             return new RestfulData<ActivityView>
             {
@@ -197,5 +199,23 @@ namespace zatbAPI.Controllers
                 message = "删除成功！"
             };
         }
+        /// <summary>
+        /// 获取用户发布的活动
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet("user")]
+        public RestfulArray<ActivityView> GetUserActivityJoinView(int page, int pageSize)
+        {
+            var userId = Helper.GetCurrentUser(HttpContext).Id;
+            var data = new DaoBase<ActivityView, int>().GetListPaged(page, pageSize, "where userId=@userId", null, new { userId });
+            return new RestfulArray<ActivityView>
+            {
+                data = data,
+                total = new DaoBase<ActivityView, int>().RecordCount("where userId=@userId", new { userId })
+            };
+        }
+
     }
 }

@@ -35,7 +35,7 @@ namespace zatbAPI.Controllers
             //验证用户名和密码
             signinForm.password = Helper.GetMd5(signinForm.password);
             var userInfo = await new UserDao().GetUser(signinForm.username, signinForm.password);
-
+         
             if (userInfo != null)
             {
                 userInfo.LastTime = Datetime.GetNowTimestamp();

@@ -11,7 +11,7 @@ using zatbAPI.Utils;
 
 namespace zatbAPI.Controllers
 {
-    [Authorize]
+    
     [Route("api/[controller]")]
     public class CommentController : Controller
     {
@@ -24,7 +24,7 @@ namespace zatbAPI.Controllers
         /// <param name="type">类型（1.打卡点，2.论坛,3.新闻）</param>
         /// <returns></returns>
         [HttpGet]
-        public RestfulArray<Comment> GetCommentList(int page,int pageSize,int? toId,int? type)
+        public RestfulArray<CommentView> GetCommentList(int page,int pageSize,int? toId,int? type)
         {
             string con = "where 1=1";
             if (toId != null)
@@ -35,10 +35,28 @@ namespace zatbAPI.Controllers
             {
                 con += string.Format(" and type={0}", type);
             }
-            return new RestfulArray<Comment>
+            return new RestfulArray<CommentView>
             {
-                data=new CommentDao().GetListPaged(page,pageSize,con,"time"),
-                total= new CommentDao().RecordCount(con)
+                data=new DaoBase<CommentView,int>().GetListPaged(page,pageSize,con,"time"),
+                total= new DaoBase<CommentView,int>().RecordCount(con)
+            };
+        }
+
+        /// <summary>
+        /// 获取当前用户评论列表
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet("user")]
+        public RestfulArray<CommentView> GetUserCommentView(int page, int pageSize)
+        {
+            var userId = Helper.GetCurrentUser(HttpContext).Id;
+            var data = new DaoBase<CommentView, int>().GetListPaged(page, pageSize, "where userId=@userId", null, new { userId });
+            return new RestfulArray<CommentView>
+            {
+                data = data,
+                total = new DaoBase<CommentView, int>().RecordCount("where userId=@userId", new { userId })
             };
         }
 

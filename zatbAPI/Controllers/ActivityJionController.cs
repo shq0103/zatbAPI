@@ -34,6 +34,25 @@ namespace zatbAPI.Controllers
         }
 
         /// <summary>
+        /// 获取用户报名活动列表
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet("user")]
+        public RestfulArray<ActivityJoinView> GetUserActivityJoinView(int page, int pageSize)
+        {
+            var userId = Helper.GetCurrentUser(HttpContext).Id;
+            var data = new DaoBase<ActivityJoinView, int>().GetListPaged(page, pageSize, "where userId=@userId", null, new { userId });
+            return new RestfulArray<ActivityJoinView>
+            {
+                data = data,
+                total = new DaoBase<ActivityJoinView, int>().RecordCount("where userId=@userId", new { userId })
+            };
+        }
+
+
+        /// <summary>
         /// 报名活动
         /// </summary>
         /// <param name="activityJoin">活动实体</param>

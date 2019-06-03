@@ -61,7 +61,7 @@ namespace zatbAPI.Controllers
             {
                 var cUser = Helper.GetCurrentUser(HttpContext);
                 var user = new UserDao().Get(cUser.Id);
-                user.Avatar = filePath;
+                user.Avatar = "/upload/" + newFileName + fileExt;
                 new UserDao().Update(user);
             }
 

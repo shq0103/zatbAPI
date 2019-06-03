@@ -75,6 +75,21 @@ namespace zatbAPI.Controllers
         }
 
         /// <summary>
+        /// 获取当前登录用户闲趣
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("user")]
+        public RestfulArray<GoodsView> GetUserGoods()
+        {
+            var cUser = Helper.GetCurrentUser(HttpContext);
+            var good = new DaoBase<GoodsView,int>().GetList(string.Format("select * from goodsView where userId={0}",cUser.Id));
+            return new RestfulArray<GoodsView>
+            {
+                data = good
+            };
+        }
+
+        /// <summary>
         /// 发布商品
         /// </summary>
         /// <param name="goods"></param>
@@ -84,6 +99,7 @@ namespace zatbAPI.Controllers
         public RestfulData PostGoods([FromBody]Goods goods)
         {
             goods.UserId = Helper.GetCurrentUser(HttpContext).Id;
+            goods.Time = Datetime.GetNowTimestamp();
             int goodsId=new GoodsDao().Insert(goods)??0;
             new ImageDao().InsertImageList(goods.imgList, goodsId, 3);
             return new RestfulData
@@ -110,9 +126,13 @@ namespace zatbAPI.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public RestfulData Delete(int id)
         {
             new GoodsDao().Delete(id);
+            return new RestfulData
+            {
+
+            };
         }
     }
 }

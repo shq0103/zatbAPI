@@ -12,7 +12,7 @@ using zatbAPI.Utils;
 namespace zatbAPI.Controllers
 {
     [Route("api/[controller]")]
-    
+
     public class PostController : Controller
     {
 
@@ -25,7 +25,7 @@ namespace zatbAPI.Controllers
         /// <param name="orderBy">排序（选填date发布时间，viewCount浏览量，replyDate最新回复）</param>
         /// <returns></returns>
         [HttpGet]
-        public RestfulArray<Post> GetPostList(int page,int pageSize,int? type,string orderBy)
+        public RestfulArray<PostView> GetPostList(int page, int pageSize, int? type, string orderBy)
         {
             string con = null;
             if (type != null)
@@ -38,12 +38,30 @@ namespace zatbAPI.Controllers
                 order = orderBy + " desc";
             }
 
-            return new RestfulArray<Post>
+            return new RestfulArray<PostView>
             {
-                data = new PostDao().GetListPaged(page, pageSize, con, order),
-                total = new PostDao().RecordCount(con)
+                data = new DaoBase<PostView,int>().GetListPaged(page, pageSize, con, order),
+                total = new DaoBase<PostView,int>().RecordCount(con)
             };
         }
+        /// <summary>
+        /// 获取当前用户帖子列表
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet("user")]
+        public RestfulArray<PostView> GetUserPostView(int page, int pageSize)
+        {
+            var userId = Helper.GetCurrentUser(HttpContext).Id;
+            var data = new DaoBase<PostView, int>().GetListPaged(page, pageSize, "where userId=@userId", null, new { userId });
+            return new RestfulArray<PostView>
+            {
+                data = data,
+                total = new DaoBase<PostView, int>().RecordCount("where userId=@userId", new { userId })
+            };
+        }
+
 
 
         /// <summary>
@@ -66,11 +84,31 @@ namespace zatbAPI.Controllers
             }
             post.UserId = cUser.Id;
             post.Date = Datetime.GetNowTimestamp();
-            int i= new PostDao().Insert(post)??0;
+            int i = new PostDao().Insert(post) ?? 0;
             var res = new RestfulData();
             res.message = "新增成功！";
             return res;
         }
+
+        /// <summary>
+        /// 通过id获取帖子
+        /// </summary>
+        /// <param name="id">帖子id</param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public RestfulData<PostView> GetPost(int id)
+        {
+            var post = new PostDao().Get(id);
+
+            post.ViewCount += 1;
+            new PostDao().Update(post);         
+            return new RestfulData<PostView>
+            {
+                data = new DaoBase<PostView, int>().Get(id)
+             };
+        }
+
+
 
         // PUT api/<controller>/5
         [HttpPut]
